@@ -1,0 +1,57 @@
+[gd_scene load_steps=8 format=3 uid="uid://cl0mkr2hs1b5c"]
+
+[ext_resource type="Texture2D" uid="uid://ck526tht4ouh4" path="res://Grids/Dark/texture_04.png" id="1_i38fu"]
+[ext_resource type="Material" uid="uid://ixah58m8o37n" path="res://red.tres" id="2_obm1h"]
+[ext_resource type="Environment" uid="uid://dc2jcp6ovsdsp" path="res://env.tres" id="3_teklx"]
+[ext_resource type="PackedScene" uid="uid://dm47w1ugfv57x" path="res://player.tscn" id="4_2yb4v"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_buls7"]
+albedo_texture = ExtResource("1_i38fu")
+uv1_triplanar = true
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_b04mk"]
+size = Vector3(1000, 1, 1000)
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_eanwl"]
+dof_blur_near_enabled = true
+
+[node name="World" type="Node3D"]
+
+[node name="Floor" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+material_override = SubResource("StandardMaterial3D_buls7")
+size = Vector3(1000, 1, 1000)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Floor"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor/StaticBody3D"]
+shape = SubResource("BoxShape3D_b04mk")
+
+[node name="Arch" type="CSGCombiner3D" parent="."]
+material_override = ExtResource("2_obm1h")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Arch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+size = Vector3(4, 4, 4)
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Arch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.984131, 0)
+operation = 2
+size = Vector3(2, 2, 4)
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="Arch"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 2, 0)
+operation = 2
+radius = 1.0
+height = 5.0
+sides = 32
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("3_teklx")
+camera_attributes = SubResource("CameraAttributesPractical_eanwl")
+
+[node name="Player" parent="." instance=ExtResource("4_2yb4v")]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.268513, 0.717561, 0.642655, 0.532641, -0.666486, 0.521623, 0.802617, 0.202242, -0.561163, 0.140747, 4.21161, 12.572)
+shadow_enabled = true
